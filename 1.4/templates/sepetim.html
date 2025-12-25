@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sepetim - Yılbaşı Dükkanı</title>
+    <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, rgba(0,255,180,0.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgba(200,255,220,0.2);
+      backdrop-filter: blur(4px);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #9cffc7;
+      text-shadow: 0 0 10px rgba(0,255,180,0.6);
+    }
+
+    nav a {
+      color: #eafff5;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+    }
+
+    main h2 {
+      font-size: 50px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 0 0 20px rgba(255,215,0,0.8);
+    }
+
+    .cart-item {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total {
+      font-size: 30px;
+      color: #ffec8b;
+      margin-top: 20px;
+    }
+
+    .buttons a {
+      display: inline-block;
+      padding: 14px 34px;
+      margin: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffd700, #7cff9a);
+      color: #032014;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 0 20px rgba(255,215,0,0.6);
+    }
+
+    .buttons a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 35px rgba(124,255,154,0.9);
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #b9ffe2;
+    }
+    </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌲🎄 Yılbaşı Dükkanı</h1>
+    <nav>
+      <a href="/">Ana Sayfa</a>
+      <a href="/sanscarki">Şans Çarkı</a>
+      <a href="#">İletişim</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>🛒 Sepetiniz</h2>
+    <div id="cart-items"></div>
+    <div class="total" id="total">Toplam: 0 TL</div>
+    <div class="buttons">
+      <a href="/urunler">Alışverişe Devam Et</a>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 • Yılbaşı Dükkanı ✨
+  </footer>
+
+  <script>
+    async function loadCart() {
+      const response = await fetch('/get_cart');
+      const cart = await response.json();
+      const cartItems = document.getElementById('cart-items');
+      cartItems.innerHTML = '';
+      let total = 0;
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p>Sepetiniz boş.</p>';
+      } else {
+        cart.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerHTML = `
+            <span>${item.name}</span>
+            <span>${item.quantity} adet - ${item.price * item.quantity} TL</span>
+            <button onclick="removeFromCart('${item.name}')">Kaldır</button>
+          `;
+          cartItems.appendChild(div);
+          total += item.price * item.quantity;
+        });
+      }
+      document.getElementById('total').innerText = 'Toplam: ' + total + ' TL';
+    }
+
+    async function removeFromCart(name) {
+      const response = await fetch('/remove_from_cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      const result = await response.json();
+      if (result.success) {
+        loadCart();
+      }
+    }
+
+    loadCart();
+  </script>
+
+</body>
+</html>

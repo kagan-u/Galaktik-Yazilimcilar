@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif; /* Yazı tipi ailesi */
+    font-size: 20px; /* <p></p> etiketindeki ana yazının boyutu */
+    background-color: rgb(255, 255, 255); /* Web sayfasının arka plan rengi */
+    color: #182236; /* Metin rengi */
+}
+
+h1 {
+    color: #870303; /* Başlık rengi */
+    font-size: 50px; /* Başlık yazı tipi boyutu */
+    font-family: Georgia, serif; /* Başlıkta kullanılan yazı tipi ailesi */
+}
+ 
+h2 {
+    color: #870303; /* Başlık rengi */
+    font-size: 35px; /* Başlık yazı tipi boyutu */
+    font-family: Georgia, serif; /* Başlıkta kullanılan yazı tipi ailesi */
+}
+@keyframes color-change {
+    0% {
+      color: rgb(179, 255, 0);
+    }
+  
+    50% {
+      color: rgb(174, 0, 255);
+    }
+  
+    100% {
+      color: rgb(183, 255, 0);
+    }
+}
+
+h1:hover {
+    animation: color-change 3s infinite;
+}
+
+.sepet-btn {
+    font-size: 24px;
+    padding: 10px 20px;
+    background-color: #870303;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.sans-btn {
+    width: 100px;
+    height: 100px;
+    background-color: #27140c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}

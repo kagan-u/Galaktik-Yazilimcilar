@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trendler</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin:20px; color:#222; }
+        .container { max-width:1100px; margin:0 auto; }
+        .tabs { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+        .tab { padding:8px 14px; border-radius:6px; background:#f0f0f0; cursor:pointer; }
+        .tab.active { background:#007bff; color:#fff; }
+        .grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+        .product-placeholder { border:1px solid #e0e0e0; padding:12px; border-radius:6px; background:#fff; }
+        .meta { font-size:13px; color:#666; margin-top:6px; }
+        .notice { margin-top:12px; padding:10px; border-radius:6px; background:#fff3cd; color:#856404; display:none; }
+        .controls { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+        .btn-secondary { padding:6px 10px; border-radius:6px; background:#6c757d; color:#fff; border:none; cursor:pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trendler🔥</h1>
+        <p>Trend olan ürünler, en çok satılanlar ve en çok beğenilenler aşağıda listelenir.</p>
+
+        <div class="controls">
+            <div class="tabs" role="tablist" aria-label="Trend kategorileri">
+                <div class="tab active" data-tab="trend">Trend Olan</div>
+                <div class="tab" data-tab="sold">En Çok Satılan</div>
+                <div class="tab" data-tab="liked">En Çok Beyenilen</div>
+            </div>
+            <button class="btn-secondary" onclick="window.location.href='/'">Ana Sayfaya Dön</button>
+        </div>
+
+        <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+        <div id="trend" class="grid" aria-live="polite"></div>
+        <div id="sold" class="grid" style="display:none"></div>
+        <div id="liked" class="grid" style="display:none"></div>
+    </div>
+
+    <script>
+    (function(){
+        const selectors = [
+            '.product', '.urun', '.card', '.product-item', '.item', 'article', 'li.product'
+        ];
+        const tabs = document.querySelectorAll('.tab');
+        const notice = document.getElementById('notice');
+        const containers = {
+            trend: document.getElementById('trend'),
+            sold: document.getElementById('sold'),
+            liked: document.getElementById('liked')
+        };
+
+        // overrides: ürün başlığının küçük harf hali -> özel değerler
+        const overrides = {
+            'yılbaşı ağacı': { sold: 1456, likes: 457 },
+            'kırmızı kurdele': { sold: 562, likes: 432 },      // örnek: başlık tam eşleşirse uygulanır
+            'altın yıldız': { sold: 545, likes: 321 },
+            'gümüş çan': { sold: 231, likes: 121 },
+            'yıldız feneri': { sold: 440, likes: 321 },
+            'kardan adam figürü': { sold: 1234, likes: 872 },
+            'yılbaşı çorabı': { sold: 783, likes: 421 },
+            'renkli ampul seti': { sold: 98, likes: 70 },
+            'yılbaşı defteri': { sold: 543, likes: 460 },
+            'kristal küre': { sold: 126, likes: 345 }
+            // İstediğin her ürünü buraya "başlık küçük harf": { sold: ..., likes: ... } şeklinde ekle
+        };
+
+        tabs.forEach(t => t.addEventListener('click', () => {
+            tabs.forEach(x => x.classList.remove('active'));
+            t.classList.add('active');
+            Object.keys(containers).forEach(k => containers[k].style.display = (k === t.dataset.tab) ? 'grid' : 'none');
+        }));
+
+        function makeCardFromElement(el) {
+            // If element is already a product-like node, try to copy visible parts
+            const card = document.createElement('div');
+            card.className = 'product-placeholder';
+            // Try to extract title/img/price if present
+            const title = el.querySelector('h2, h3, .title, .name') || el.querySelector('a') || null;
+            const img = el.querySelector('img');
+            const price = el.querySelector('.price, .fiyat, .ucret') || null;
+            if (img && img.src) {
+                const i = document.createElement('img');
+                i.src = img.src;
+                i.alt = img.alt || '';
+                i.style.maxWidth = '100%';
+                i.style.borderRadius = '4px';
+                card.appendChild(i);
+            }
+            if (title) {
+                const h = document.createElement('div');
+                h.textContent = title.textContent.trim();
+                h.style.fontWeight = '600';
+                h.style.marginTop = '8px';
+                card.appendChild(h);
+            }
+            if (price) {
+                const p = document.createElement('div');
+                p.textContent = price.textContent.trim();
+                p.style.color = '#007bff';
+                p.style.marginTop = '6px';
+                card.appendChild(p);
+            }
+            // meta from data attributes (or overrides)
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            // read original values
+            let sold = el.getAttribute('data-sold') || '0';
+            let likes = el.getAttribute('data-likes') || '0';
+            // check overrides by title
+            const titleText = title ? title.textContent.trim().toLowerCase() : '';
+            if (titleText && overrides[titleText]) {
+                sold = String(overrides[titleText].sold);
+                likes = String(overrides[titleText].likes);
+            }
+            meta.textContent = `Satış: ${sold} • Beğeni: ${likes}`;
+            card.appendChild(meta);
+            // store numeric meta for sorting
+            card._sold = parseInt(sold,10) || 0;
+            card._likes = parseInt(likes,10) || 0;
+            return card;
+        }
+
+        function populateGrids(productNodes) {
+            const cards = productNodes.map(n => makeCardFromElement(n));
+            if (!cards.length) {
+                notice.style.display = 'block';
+                notice.textContent = 'Ürün bulunamadı. Lütfen urunler sayfasındaki ürünlerin .product veya benzeri sınıf isimleriyle işaretlendiğinden emin olun.';
+                return;
+            }
+            notice.style.display = 'none';
+            // Trend: combine score = sold + likes
+            const trendSorted = [...cards].sort((a,b) => (b._sold + b._likes) - (a._sold + a._likes));
+            const soldSorted  = [...cards].sort((a,b) => b._sold - a._sold);
+            const likedSorted = [...cards].sort((a,b) => b._likes - a._likes);
+            function render(list, container) {
+                container.innerHTML = '';
+                list.forEach(c => container.appendChild(c.cloneNode(true)));
+            }
+            render(trendSorted, containers.trend);
+            render(soldSorted, containers.sold);
+            render(likedSorted, containers.liked);
+        }
+
+        // Try to fetch /urunler and parse product elements
+        fetch('/urunler').then(r => r.text()).then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            let found = [];
+            for (const sel of selectors) {
+                const nodes = Array.from(doc.querySelectorAll(sel));
+                if (nodes.length) {
+                    // prefer unique nodes
+                    nodes.forEach(n => { if (!found.includes(n)) found.push(n); });
+                }
+            }
+            // If still empty, try to take main content children as fallback
+            if (!found.length) {
+                const main = doc.querySelector('main, #main, .container, .products');
+                if (main) found = Array.from(main.children).slice(0, 50);
+            }
+            populateGrids(found);
+        }).catch(() => {
+            notice.style.display = 'block';
+            notice.textContent = 'Ürünleri yüklerken hata oluştu. Sunucuya bağlanılamıyor.';
+        });
+
+    })();
+    </script>
+</body>
+</html>

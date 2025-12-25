@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Yıldız Feneri — Ürün Detayı</title>
+  <style>
+    body{font-family:Arial, sans-serif; background:linear-gradient(135deg,#0a0a0a,#1a1a2e);color:#fff;margin:0}
+    header{padding:18px 30px;background:rgba(0,0,0,0.4);display:flex;justify-content:space-between}
+    main{max-width:900px;margin:30px auto;padding:20px;background:rgba(0,0,0,0.45);border-radius:12px}
+    .product{display:flex;gap:24px;align-items:flex-start}
+    .product img{width:280px;height:280px;object-fit:cover;border-radius:8px}
+    .info h1{margin:0 0 10px;color:#ffd700}
+    .meta{color:#cfeee0;margin:8px 0}
+    .stats{display:flex;gap:12px;margin:10px 0}
+    .stat{background:rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px}
+    .comments{margin-top:18px}
+    .comment{background:rgba(0,0,0,0.35);padding:10px;border-radius:8px;margin-bottom:8px}
+    .back{display:inline-block;margin-top:12px;padding:8px 14px;border-radius:999px;background:linear-gradient(135deg,#ffd700,#7cff9a);color:#032014;text-decoration:none}
+    form textarea{width:100%;height:80px;padding:8px;border-radius:6px;border:none;margin-top:8px}
+    form button{margin-top:8px;padding:8px 14px;border-radius:6px;border:none;background:#7cff9a;color:#032014;font-weight:bold}
+  </style>
+</head>
+<body>
+  <header>
+    <h2>🌲 Yılbaşı Dükkanı</h2>
+    <nav><a href="/urunler.html" class="back">Geri</a></nav>
+  </header>
+
+  <main>
+    <div class="product">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIREhUTEhIWFhUWFh4YFxgYFyAfFxcbGxkbGRgeGRcdICggGholGxoWITEhJSkrLi4uHB82ODMtNygtLi4BCgoKDg0OGxAQGzAmICYvLjArMi8vLy8vLSs1Ly8tLTIyMi0vLS0vLS0vLTUtNTUtLS0tLy0tLS0tLS0vLy0tL//AABEIAOEA4QMBEQACEQEDEQH/xAAcAAEAAgMBAQEAAAAAAAAAAAAABQYDBAcCCAH/xABAEAABBAAEBAMGBAMGBQUAAAABAgADEQQSITEFBkFREyJhBxQycYGRoQcUQlJiI3KSscEVM1OCotEWJEPS4fCTslR0g//EABsBAAIDAQEBAAAAAAAAAAAAAAIDAAEEBQYH/8QAMxEAAgECBAMHAwUBAAMBAAAAAAECAxEEEiExE0FRBSJhcYGR8KGxwRQy0eHxQhUjUiT/2gAMAwEAAhEDEQA/AO4oAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCA//2Q==" alt="Yıldız Feneri">
+      <div class="info">
+        <h1>Yıldız Feneri</h1>
+        <p class="meta">Fiyat: <strong>25 TL</strong></p>
+        <p>Renkli yıldız feneri; içindeki ışıkla geceleri sıcak bir ambiyans sağlar. İç ve dış mekan kullanımına uygundur.</p>
+
+        <div class="stats">
+          <div class="stat">❤️ Beğeni: <strong id="likes">321</strong></div>
+          <div class="stat">🛒 Satış: <strong id="sold">440</strong></div>
+        </div>
+
+        <div class="comments">
+          <h3>Yorumlar</h3>
+          <div class="comment"><strong>Nihan:</strong> Bahçede çok güzel durdu.</div>
+
+          <form id="commentForm">
+            <label for="comment">Yeni yorumunuz:</label>
+            <textarea id="comment" placeholder="Yorum yazın..."></textarea>
+            <button type="button" onclick="addComment()">Gönder</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function addComment(){
+      const t = document.getElementById('comment');
+      if(!t.value.trim()) return alert('Yorum boş olamaz');
+      const div = document.createElement('div');
+      div.className='comment';
+      div.innerHTML = '<strong>Kullanıcı:</strong> '+escapeHtml(t.value);
+      document.querySelector('.comments').insertBefore(div, document.getElementById('commentForm'));
+      t.value='';
+    }
+    function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  </script>
+</body>
+</html>

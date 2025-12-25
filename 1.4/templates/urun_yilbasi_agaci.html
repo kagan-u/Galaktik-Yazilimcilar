@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Yılbaşı Ağacı — Ürün Detayı</title>
+  <style>
+    body{font-family:Arial, sans-serif; background:linear-gradient(135deg,#0a0a0a,#1a1a2e);color:#fff;margin:0}
+    header{padding:18px 30px;background:rgba(0,0,0,0.4);display:flex;justify-content:space-between}
+    main{max-width:1000px;margin:30px auto;padding:20px;background:rgba(0,0,0,0.45);border-radius:12px}
+    .product{display:flex;gap:24px;align-items:flex-start}
+    .product img{width:320px;height:320px;object-fit:cover;border-radius:8px}
+    .info h1{margin:0 0 10px;color:#ffd700}
+    .meta{color:#cfeee0;margin:8px 0}
+    .stats{display:flex;gap:12px;margin:10px 0}
+    .stat{background:rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px}
+    .comments{margin-top:18px}
+    .comment{background:rgba(0,0,0,0.35);padding:10px;border-radius:8px;margin-bottom:8px}
+    .back{display:inline-block;margin-top:12px;padding:8px 14px;border-radius:999px;background:linear-gradient(135deg,#ffd700,#7cff9a);color:#032014;text-decoration:none}
+    form textarea{width:100%;height:80px;padding:8px;border-radius:6px;border:none;margin-top:8px}
+    form button{margin-top:8px;padding:8px 14px;border-radius:6px;border:none;background:#7cff9a;color:#032014;font-weight:bold}
+  </style>
+</head>
+<body>
+  <header>
+    <h2>🌲 Yılbaşı Dükkanı</h2>
+    <nav><a href="/urunler.html" class="back">Geri</a></nav>
+  </header>
+
+  <main>
+    <div class="product">
+      <img src="data:image/jpeg;base64,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" alt="Yılbaşı Ağacı">
+      <div class="info">
+        <h1>Yılbaşı Ağacı</h1>
+        <p class="meta">Fiyat: <strong>100 TL</strong></p>
+        <p>Geleneksel çıtır dallı yılbaşı ağacımız, evinizi sıcacık bir atmosfere sokar. Dekorasyon için ideal boyut ve sağlam tabanlıdır.</p>
+
+        <div class="stats">
+          <div class="stat">❤️ Beğeni: <strong id="likes">457</strong></div>
+          <div class="stat">🛒 Satış: <strong id="sold">1456</strong></div>
+        </div>
+
+        <div class="comments">
+          <h3>Yorumlar</h3>
+          <div class="comment"><strong>Ayşe:</strong> Çok güzel çıktı, beklediğimden daha dolgun.</div>
+          <div class="comment"><strong>Mehmet:</strong> Hızlı gönderi, paketleme özenliydi.</div>
+
+          <form id="commentForm">
+            <label for="comment">Yeni yorumunuz:</label>
+            <textarea id="comment" placeholder="Yorum yazın..."></textarea>
+            <button type="button" onclick="addComment()">Gönder</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function addComment(){
+      const t = document.getElementById('comment');
+      if(!t.value.trim()) return alert('Yorum boş olamaz');
+      const div = document.createElement('div');
+      div.className='comment';
+      div.innerHTML = '<strong>Kullanıcı:</strong> '+escapeHtml(t.value);
+      document.querySelector('.comments').insertBefore(div, document.getElementById('commentForm'));
+      t.value='';
+    }
+    function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  </script>
+</body>
+</html>

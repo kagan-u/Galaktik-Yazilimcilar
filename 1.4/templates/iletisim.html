@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim</title>
+    <style>
+        /* Basit stil, gerektiğinde projeye uygun hale getirin */
+        body { font-family: Arial, sans-serif; margin: 20px; padding: 0; color: #222; }
+        .container { max-width: 600px; margin: 0 auto; }
+        label { display:block; margin-top:12px; font-weight:600; }
+        input[type="text"], input[type="email"], textarea {
+            width:100%; padding:8px; margin-top:6px; box-sizing:border-box;
+            border:1px solid #ccc; border-radius:4px;
+        }
+        button { margin-top:12px; padding:10px 16px; border:none; background:#007bff; color:white; border-radius:4px; cursor:pointer; }
+        .msg { margin-top:12px; padding:10px; border-radius:4px; display:none; }
+        .msg.success { background:#e6ffed; color:#086b3f; border:1px solid #c6f0d0; display:block; }
+        .msg.error { background:#ffe6e6; color:#a61b1b; border:1px solid #f0c6c6; display:block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>İletişim</h1>
+        <p><button type="button" onclick="window.location.href='/'">Ana Sayfaya Dön</button></p>
+        <p>Herhangi bir sorunuz varsa aşağıdaki formu doldurun, en kısa sürede dönüş yapacağız.</p>
+
+        <form id="contactForm">
+            <label for="name">Adınız</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">E-posta (opsiyonel)</label>
+            <input type="email" id="email" name="email">
+
+            <label for="message">Mesajınız</label>
+            <textarea id="message" name="message" rows="6" required></textarea>
+
+            <button type="submit">Gönder</button>
+        </form>
+
+        <div id="response" class="msg" role="status" aria-live="polite"></div>
+    </div>
+
+    <script>
+    (function(){
+        const form = document.getElementById('contactForm');
+        const resp = document.getElementById('response');
+
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            resp.style.display = 'none';
+            const data = {
+                name: form.name.value.trim(),
+                email: form.email.value.trim(),
+                message: form.message.value.trim()
+            };
+            if (!data.name || !data.message) {
+                resp.textContent = 'Lütfen adınızı ve mesajınızı girin.';
+                resp.className = 'msg error';
+                return;
+            }
+            fetch('/submit_contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json().then(body => ({ ok: r.ok, body })))
+            .then(result => {
+                if (result.ok && result.body.success) {
+                    resp.textContent = result.body.message || 'Mesaj gönderildi.';
+                    resp.className = 'msg success';
+                    form.reset();
+                } else {
+                    resp.textContent = (result.body && result.body.error) || 'Gönderim sırasında bir hata oluştu.';
+                    resp.className = 'msg error';
+                }
+            })
+            .catch(() => {
+                resp.textContent = 'Sunucuya ulaşılamıyor. Lütfen daha sonra tekrar deneyin.';
+                resp.className = 'msg error';
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

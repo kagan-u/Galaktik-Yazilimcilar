@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ request.args.get('name','Ürün') }} — Ürün Detayı</title>
+  <style>
+    body{font-family:Arial, sans-serif;background:linear-gradient(135deg,#0a0a0a,#1a1a2e);color:#fff;margin:0}
+    main{max-width:900px;margin:30px auto;padding:20px;background:rgba(0,0,0,0.45);border-radius:12px}
+    .back{display:inline-block;margin-bottom:12px;padding:8px 14px;border-radius:999px;background:linear-gradient(135deg,#ffd700,#7cff9a);color:#032014;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main>
+    <a href="/urunler.html" class="back">◀ Geri</a>
+    <h1>{{ request.args.get('name','Ürün') }}</h1>
+    <p>Bu genel ürün sayfası, URL parametresi olarak gelen `name` değerini gösterir.</p>
+    <p><strong>Not:</strong> Eğer bu sayfa ayrı bir ürün detayına yönlendirilmişse, ürün için özel şablonlar oluşturmak daha iyi bir deneyim sağlar.</p>
+  </main>
+</body>
+</html>

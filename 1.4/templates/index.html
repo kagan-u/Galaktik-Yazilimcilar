@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <title>Ana Sayfa</title>
+    <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, rgba(0,255,180,0.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgba(200,255,220,0.2);
+      backdrop-filter: blur(4px);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #9cffc7;
+      text-shadow: 0 0 10px rgba(0,255,180,0.6);
+    }
+
+    nav a {
+      color: #eafff5;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+    }
+
+    main h2 {
+      font-size: 50px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 0 0 20px rgba(255,215,0,0.8);
+    }
+
+    main p {
+      font-size: 18px;
+      max-width: 700px;
+      line-height: 1.8;
+      color: #e0fff3;
+    }
+
+    .buttons {
+      margin-top: 40px;
+    }
+
+    .buttons a {
+      display: inline-block;
+      padding: 14px 34px;
+      margin: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffd700, #7cff9a);
+      color: #032014;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 0 20px rgba(255,215,0,0.6);
+    }
+
+    .buttons a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 35px rgba(124,255,154,0.9);
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #b9ffe2;
+    }
+
+    /* Kar + Büyü Tozları */
+    .particle {
+      position: fixed;
+      top: -10px;
+      user-select: none;
+      pointer-events: none;
+      animation: fall linear infinite;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.8));
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+      }
+    }
+
+    .sepet-btn, .sans-btn {
+      margin-right: 10px;
+    }
+    </style>
+</head>
+<body>
+
+  <!-- Kar taneleri ve büyülü parçacıklar -->
+  <script>
+    const icons = ['❄','✨','✦','✧'];
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = 6 + Math.random() * 12 + 's';
+      p.style.fontSize = 12 + Math.random() * 26 + 'px';
+      p.style.opacity = Math.random();
+      document.body.appendChild(p);
+    }
+  </script>
+
+  <header>
+    <h1>🌲🎄 Yılbaşı Dükkanı</h1>
+    <nav>
+      <a href="/urunler">Ürünlerimiz🛍️</a>
+      <a href="/trend">Trends🔥</a>
+      <a href="/iletisim">İletişim📞</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>✨ Hoş Geldiniz! ✨</h2>
+    <p>
+      Işıklarla süslenmiş kadim ağaçların arasında, yeni bir yıl başlıyor.
+      Bu ormanda her fikir filizlenir, her başlangıç güce dönüşür.
+    </p>
+
+    <div class="buttons">
+      <a href="/sepetim">Sepetim</a>
+      <a href="/sanscarki">Sans Çarkı</a>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 • Yılbaşı Dükkanı ✨
+  </footer>
+
+</body>
+</html>
